@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Cobro</title>
+  </head>
+  <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+    <style>
+      /* table {
+        width: 100%;
+        border: 1px solid #999;
+        text-align: left;
+        border-collapse: collapse;
+        margin: 0 0 1em 0;
+        caption-side: top;
+      }
+      td {
+        height: 20%;
+      }
+      caption,
+      td,
+      th {
+        padding: 0.3em;
+      }
+      th,
+      td {
+        style="border-bottom: 1px solid #999; height: 20%, padding: 6px"
+      }
+      caption {
+        font-weight: bold;
+        font-style: italic;
+      } */
+    </style>
+    <div>
+      <table style="text-align: center; border:none">
+        <tbody>
+            <tr> 
+                <td>
+                    <img
+                    style="width: 130px"
+                    src="https://github.com/yonaiker-web/unidigital-cobro-correoPlantilla/blob/main/assets/img/tupago-logo.png?raw=true"
+                    alt=""
+                    />
+                </td>
+
+                <td>
+                    <h1 style="text-align: center; display: inline-block; margin: 0">
+                    {{ title }}
+                    </h1>
+                </td>
+                <td>
+                    <img
+                        src="https://github.com/yonaiker-web/unidigital-cobro-correoPlantilla/blob/main/assets/img/unidigital-logo.png?raw=true"
+                        style="width: 120px"
+                        alt=""
+                    />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+      
+       
+      </div>
+      <div>
+        <div>
+          <table style="width:100%; border: 1px solid #999; text-align: left; border-collapse: collapse; margin: 0 0 1em 0; caption-side: top;">
+            <tbody style="width: 50%">
+              <tr>
+                <td style="width: 40%; border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">SERIAL</td>
+                <td style="width: 60%; border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ Serial }}</td>
+              </tr>
+              <tr>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">MODELO POS</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ Model }}</td>
+              </tr>
+              <tr>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">NOMBRE O RAZON SOCIAL</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ Name }}</td>
+              </tr>
+              <tr>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">RIF</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ RIF }}</td>
+              </tr>
+              <tr>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">CODIGO DE AFILIACION</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ AfiliationCode }}</td>
+              </tr>
+              <tr>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">TERMINAL</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ Terminal }}</td>
+              </tr>
+              <tr>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">ESTADO</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ State }}</td>
+              </tr>
+              <tr>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">TELEFONO</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ Phone }}</td>
+              </tr>
+              <tr>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">CORREO</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ Email }}</td>
+              </tr>
+              <tr>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">BANCO</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ Bank }}</td>
+              </tr>
+              <tr>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">CUOTA MENSUAL DESDE JULIO</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">Boxing</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="width: 280px; float: right">
+        <table style="width:100%; border: 1px solid #999; text-align: left; border-collapse: collapse; margin: 0 0 1em 0; caption-side: top;">
+          <thead style="padding: 15%; background-color: rgb(227, 132, 0)">
+            <tr>
+              <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">TOTAL DEUDA</th>
+              <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">${{debt}}</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+
+      <div style="clear: both; height: 20px"></div>
+
+      <table style="width:100%; border: 1px solid #999; text-align: left; border-collapse: collapse; margin: 0 0 1em 0; caption-side: top;">
+        <thead style="padding: 15%; background-color: rgb(227, 132, 0)">
+          <tr>
+            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">MES</th>
+            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">CUOTA PUNTO</th>
+            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">SERVICIO MANTENIMIENTO</th>
+            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">TOTAL FINANCIADO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">CUOTA 1</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 60,00</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 15,00</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 75,00</td>
+          </tr>
+          <tr>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">CUOTA 2</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 60,00</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 15,00</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 75,00</td>
+          </tr>
+          <tr>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">CUOTA 3</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 60,00</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 15,00</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 75,00</td>
+          </tr>
+          <tr style="font-weight:bold">
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px"></td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 180,00</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 45,00</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 225,00</td>
+          </tr>
+          <tr style="background-color: rgb(227, 132, 0); font-weight: bold;">
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">MONTO COBRADO</th>
+            <td></td>
+            <td></td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">${{ChargedUSD}}</th>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>DETALLES DESCUENTOS CLIENTE</h3>
+
+      <table style="width:100%; border: 1px solid #999; text-align: left; border-collapse: collapse; margin: 0 0 1em 0; caption-side: top;">
+        <thead style="padding: 15%; background-color: rgb(227, 132, 0)">
+          <tr>
+            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">MONTO DESCONTADO CLIENTE BS.</th>
+            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">TASA DE CAMBIO APLICADA</th>
+            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px; width: 200px">MONTO DESCONTADO CLIENTE EQUIVALENTE EN $</th>
+            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">DESCRIPCION</th>
+            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">FECHA COBRO DOMICILIACION</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for charge in charges -%}
+          <tr>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ charge.ValueVES }}</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ charge.ExchangeRate }}</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">${{ charge.ValueUSD }}</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ charge.Description }}</td>
+            <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ charge.Date }}</td>
+          </tr>
+          {% endfor -%}
+          <tr style="font-weight:bold">
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ ChargedVES }}</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px"></td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">${{ ChargedUSD}}</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px"></td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px"></td>
+              </tr>
+        </tbody>
+      </table>
+
+      <h5>
+        NOTA: Se estara procesando el cobro de la Deuda Pendiente, mediante la
+        descripcion de "COBRO DOMICILIADO"
+      </h5>
+    </div>
+  </body>
+</html>
