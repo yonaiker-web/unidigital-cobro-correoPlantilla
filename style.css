@@ -1,0 +1,24 @@
+table {
+  width: 100%;
+  border: 1px solid #999;
+  text-align: left;
+  border-collapse: collapse;
+  margin: 0 0 1em 0;
+  caption-side: top;
+}
+tdT {
+  height: 20%;
+}
+caption,
+td,
+th {
+  padding: 0.3em;
+}
+th,
+td {
+  border-bottom: 1px solid #999;
+}
+caption {
+  font-weight: bold;
+  font-style: italic;
+}
