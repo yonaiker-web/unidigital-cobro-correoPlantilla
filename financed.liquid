@@ -36,12 +36,12 @@
       } */
     </style>
     <div>
-      <table style="text-align: center; border:none">
+      <table style="text-align: center; border:none; margin: auto; ">
         <tbody>
             <tr> 
                 <td>
                     <img
-                    style="width: 130px"
+                    style="width: 130px; margin-right: 20px; "
                     src="https://github.com/yonaiker-web/unidigital-cobro-correoPlantilla/blob/main/assets/img/tupago-logo.png?raw=true"
                     alt=""
                     />
@@ -55,7 +55,7 @@
                 <td>
                     <img
                         src="https://github.com/yonaiker-web/unidigital-cobro-correoPlantilla/blob/main/assets/img/unidigital-logo.png?raw=true"
-                        style="width: 120px"
+                        style="width: 120px; margin-left: 20px;"
                         alt=""
                     />
                 </td>
@@ -111,7 +111,7 @@
               </tr>
               <tr>
                 <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; font-weight:bold">CUOTA MENSUAL DESDE JULIO</td>
-                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">Boxing</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">$ 30</td>
               </tr>
             </tbody>
           </table>
@@ -121,7 +121,7 @@
       <div style="width: 280px; float: right">
         <table style="width:100%; border: 1px solid #999; text-align: left; border-collapse: collapse; margin: 0 0 1em 0; caption-side: top;">
           <thead style="padding: 15%; background-color: rgb(227, 132, 0)">
-            <tr>
+            <tr style="font-size: large;">
               <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">TOTAL DEUDA</th>
               <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">${{debt}}</th>
             </tr>
@@ -131,10 +131,10 @@
 
       <div style="clear: both; height: 20px"></div>
 
-      <table style="width:100%; border: 1px solid #999; text-align: left; border-collapse: collapse; margin: 0 0 1em 0; caption-side: top;">
+      <table style="width:100%; border: 1px solid #999; text-align: center; border-collapse: collapse; margin: 0 0 1em 0; caption-side: top;">
         <thead style="padding: 15%; background-color: rgb(227, 132, 0)">
           <tr>
-            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">MES</th>
+            <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">CUOTA</th>
             <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">CUOTA PUNTO</th>
             <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">SERVICIO MANTENIMIENTO</th>
             <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">TOTAL FINANCIADO</th>
@@ -176,7 +176,7 @@
 
       <h3>DETALLES DESCUENTOS CLIENTE</h3>
 
-      <table style="width:100%; border: 1px solid #999; text-align: left; border-collapse: collapse; margin: 0 0 1em 0; caption-side: top;">
+      <table style="width:100%; border: 1px solid #999; text-align: center; border-collapse: collapse; margin: 0 0 1em 0; caption-side: top;">
         <thead style="padding: 15%; background-color: rgb(227, 132, 0)">
           <tr>
             <th style="border-bottom: 1px solid #999; height: 20%; padding: 6px">MONTO DESCONTADO CLIENTE BS.</th>
@@ -198,7 +198,7 @@
           </tr>
           {% endfor -%}
           <tr style="font-weight:bold">
-                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">{{ ChargedVES }}</td>
+                <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px; text-align: center;">{{ ChargedVES }}</td>
                 <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px"></td>
                 <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px">${{ ChargedUSD}}</td>
                 <td style="border-bottom: 1px solid #999; height: 20%; padding: 6px"></td>
@@ -207,9 +207,12 @@
         </tbody>
       </table>
 
-      <h5>
-        NOTA: Se estara procesando el cobro de la Deuda Pendiente, mediante la
-        descripcion de "COBRO DOMICILIADO"
+      <h5 style="font-size: large;">
+        {% if Debt <= 0 %}
+        Nota: Estimado Cliente se le informa que usted ya culminó con el pago de su Punto de Venta Financiado y se le recuerda que a partir del 01-07-2022 su Cuota de Mantenimiento Mensual es de 30$ y los cobros se reflejarán en su Estado de Cuenta bajo el concepto de “COBRO CENTRALIZADO”.           
+        {% else %}
+        Nota: Estimado Cliente se le recuerda que su Cuota de Mantenimiento Mensual a partir del 01-07-2022 es de 30$,  su cobro se reflejará en su Estado de Cuenta bajo el concepto de “COBRO CENTRALIZADO” y el cobro de la Deuda Pendiente por el Financiamiento del Punto de Ventas, se reflejará en su Estado de Cuenta mediante el Concepto de “COBRO DOMICILIADO” hasta la extinción total de la misma.
+        {% endif %}
       </h5>
     </div>
   </body>
