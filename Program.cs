@@ -80,10 +80,10 @@ foreach (var file in financedFiles.Files)
         };
     }).ToList();
 
+    var template = Template.Parse(File.ReadAllText("./financed.liquid"));
+
     foreach (var client in clients)
     {
-        var template = Template.Parse(File.ReadAllText("./financed.liquid"));
-
         File.WriteAllText($"./emails/financed/{file.Path}/{client.Id}.html", template.Render(Hash.FromAnonymousObject(client)));
     }
 }
