@@ -45,23 +45,51 @@ class PosClient
 
 
 
-class CentralizedCharge
+class CentralizedCharge : ILiquidizable
 {
     public int Day { get; set; }
     public int Month { get; set; }
+    public int Year { get; set; }
     public decimal ValueVES { get; set; }
     public decimal ExchangeRate { get; set; }
     public decimal ValueUSD { get; set; }
     public string Description { get; set; } = null!;
     public string Date { get; set; } = null!;
+
+    public object ToLiquid()
+    {
+        return new
+        {
+            Day = Day,
+            Month = Month,
+            ValueVES = Util.formatNumber(ValueVES),
+            ExchangeRate = Util.formatNumber(ExchangeRate),
+            ValueUSD = Util.formatNumber(ValueUSD),
+            Description,
+            Date
+        };
+    }
 }
 
-class CentralizedMonth
+class CentralizedMonth : ILiquidizable
 {
     public int Month { get; set; }
+    public string MonthLetters { get; set; } = null!;
     public decimal MonthlyFee { get; set; }
     public decimal Charged { get; set; }
     public decimal Pending { get; set; }
+
+    public object ToLiquid()
+    {
+        return new
+        {
+            Month = Month,
+            MonthLetters = MonthLetters,
+            MonthlyFee = Util.formatNumber(MonthlyFee),
+            Charged = Util.formatNumber(Charged),
+            Pending = Util.formatNumber(Pending)
+        };
+    }
 }
 
 class CentralizedUser
@@ -77,7 +105,17 @@ class CentralizedUser
     public IList<CentralizedCharge> Charges { get; set; } = null!;
     public IList<CentralizedMonth> Months { get; set; } = null!;
     public string Fee { get; set; } = null!;
-    public string ChargedTotal { get; set; } = null!;
+    public string ChargedUSD { get; set; } = null!;
+    public string ChargedVES { get; set; } = null!;
+
     public string Debt { get; set; } = null!;
 }
 
+public class Grouping<TKey, TElement> : List<TElement>, IGrouping<TKey, TElement>
+{
+    public Grouping(TKey key) : base() => Key = key;
+    public Grouping(TKey key, int capacity) : base(capacity) => Key = key;
+    public Grouping(TKey key, IEnumerable<TElement> collection)
+        : base(collection) => Key = key;
+    public TKey Key { get; }
+}

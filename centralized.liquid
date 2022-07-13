@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+    <div>
+      <div>
+        <img
+          style="
+            background-color: orange;
+            width: 130px;
+            height: 130px;
+            margin: 2%;
+          "
+          src="https://www.tupagoglobal.com/wp-content/uploads/2020/11/PNG-BLANCO.png"
+          alt=""
+        />
+        <h1 style="display: flex; justify-content: center; align-items: center">
+          NOTIFICACIÓN DE COBRO
+        </h1>
+        <img
+          src="https://www.unidigital.global/wp-content/uploads/2020/09/unidigital-logo-new.png"
+          style="
+            background-color: orange;
+            width: 130px;
+            height: 130px;
+            margin: 2%;
+          "
+          alt=""
+        />
+      </div>
+      <table
+        style="
+          width: 100%;
+          border: 1px solid #999;
+          text-align: left;
+          border-collapse: collapse;
+          margin: 0 0 1em 0;
+          caption-side: top;
+        "
+      >
+        <tbody style="width: 50%">
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+                width: 40%;
+              "
+            >
+              MODELO POS
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                width: 60%;
+              "
+            >
+              {{ Model }}
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              NOMBRE O RAZON SOCIAL
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ Name }}
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              RIF
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ RIF }}
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              CODIGO DE AFILIACION
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ AffiliationCode }}
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              TERMINAL
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ Terminal }}
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              ESTADO
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ State }}
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              BANCO
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ Bank }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="width: 280px; float: right">
+        <div>
+          <table
+            style="
+              width: 100%;
+              border: 1px solid #999;
+              text-align: left;
+              border-collapse: collapse;
+              margin: 0 0 1em 0;
+              caption-side: top;
+            "
+          >
+            <thead style="padding: 15%; background-color: rgb(227, 132, 0)">
+              <tr>
+                <th>TOTAL DEUDA</th>
+                <th>${{ Debt }}</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+
+      <table
+        style="
+          width: 100%;
+          border: 1px solid #999;
+          text-align: center;
+          border-collapse: collapse;
+          margin: 0 0 1em 0;
+          caption-side: top;
+        "
+      >
+        <thead style="padding: 15%; background-color: rgb(227, 132, 0)">
+          <tr>
+            <th>MES</th>
+            <th>CUOTA MENSUAL</th>
+            <th>COBRADO</th>
+            <th>PENDIENTE</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in months -%}
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ m.MonthLetters }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              ${{ m.MonthlyFee }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              ${{ m.Charged }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              ${{ m.Pending }}
+            </td>
+          </tr>
+          {% endfor -%}
+
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            ></td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              ${{ Fee }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              ${{ ChargedUSD }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              ${{ Debt }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>DETALLES DESCUENTOS CLIENTE</h3>
+
+      <table
+        style="
+          width: 100%;
+          border: 1px solid #999;
+          text-align: center;
+          border-collapse: collapse;
+          margin: 0 0 1em 0;
+          caption-side: top;
+        "
+      >
+        <thead style="padding: 15%; background-color: rgb(227, 132, 0)">
+          <tr>
+            <th style="width: 50px">DIA</th>
+            <th style="width: 50px">MES</th>
+            <th style="width: 200px">MONTO DESCONTADO CLIENTE BS.</th>
+            <th>TASA DE CAMBIO APLICADA</th>
+            <th style="width: 250px">
+              MONTO DESCONTADO CLIENTE EQUIVALENTE EN $
+            </th>
+            <th>DESCRIPCION</th>
+            <th>FECHA DOMICILIACION</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in charges -%}
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ c.Day }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ c.Month }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ c.ValueVES }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ c.ExchangeRate }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              ${{ c.ValueUSD }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ c.Description }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+              "
+            >
+              {{ c.Date }}
+            </td>
+          </tr>
+          {% endfor -%}
+
+          <tr>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            ></td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            ></td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              {{ ChargedVES }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            ></td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            >
+              ${{ ChargedUSD }}
+            </td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            ></td>
+            <td
+              style="
+                border-bottom: 1px solid #999;
+                height: 20%;
+                padding: 6px;
+                font-weight: bold;
+              "
+            ></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h5>
+        NOTA: Por favor comunicarse con TUPAGOGLOBAL 04149154205, a fin de
+        ponerse al dia con la Deuda."
+      </h5>
+    </div>
+  </body>
+</html>

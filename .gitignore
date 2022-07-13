@@ -1,3 +1,5 @@
 /bin
 /emails
 /obj
+node_modules
+*.xlsx

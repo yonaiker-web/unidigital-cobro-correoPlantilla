@@ -6,11 +6,11 @@ using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Unidigital.Cobros;
 using Unidigital.Cobros.Interfaces;
 
-System.IO.Directory.CreateDirectory("./financiados");
-System.IO.Directory.CreateDirectory("./financiados/pending");
-System.IO.Directory.CreateDirectory("./financiados/backup");
-System.IO.Directory.CreateDirectory("./financiados/processed");
-System.IO.Directory.CreateDirectory("./financiados/errored");
+System.IO.Directory.CreateDirectory("./financed");
+System.IO.Directory.CreateDirectory("./financed/pending");
+System.IO.Directory.CreateDirectory("./financed/backup");
+System.IO.Directory.CreateDirectory("./financed/processed");
+System.IO.Directory.CreateDirectory("./financed/errored");
 
 System.IO.Directory.CreateDirectory("./centralized");
 System.IO.Directory.CreateDirectory("./centralized/pending");
@@ -23,7 +23,7 @@ System.IO.Directory.CreateDirectory("./centralized/errored");
 Matcher financedMatcher = new();
 financedMatcher.AddIncludePatterns(new[] { "*.xlsx" });
 
-string financedDirectory = "./financiados/pending";
+string financedDirectory = "./financed/pending";
 
 PatternMatchingResult financedFiles = financedMatcher.Execute(
     new DirectoryInfoWrapper(
@@ -33,9 +33,9 @@ var DEBT_USD = 225;
 
 foreach (var file in financedFiles.Files)
 {
-    System.IO.Directory.CreateDirectory($"./emails/{file.Path}");
+    System.IO.Directory.CreateDirectory($"./emails/financed/{file.Path}");
 
-    var workbook = new XLWorkbook(Path.Combine("./financiados/pending", file.Path));
+    var workbook = new XLWorkbook(Path.Combine("./financed/pending", file.Path));
     var ws = workbook.Worksheet(1);
     var rows = ws.RangeUsed().RowsUsed();
     var groups = rows.Skip(1).GroupBy(row => row.Cell("B").GetFormattedString());
@@ -82,9 +82,9 @@ foreach (var file in financedFiles.Files)
 
     foreach (var client in clients)
     {
-        var template = Template.Parse(File.ReadAllText("./template.liquid"));
+        var template = Template.Parse(File.ReadAllText("./financed.liquid"));
 
-        File.WriteAllText($"./emails/{file.Path}/{client.Id}.html", template.Render(Hash.FromAnonymousObject(client)));
+        File.WriteAllText($"./emails/financed/{file.Path}/{client.Id}.html", template.Render(Hash.FromAnonymousObject(client)));
     }
 }
 #endregion
@@ -94,7 +94,9 @@ foreach (var file in financedFiles.Files)
 Matcher centralizedMatcher = new();
 centralizedMatcher.AddIncludePatterns(new[] { "*.xlsx" });
 
-string centralizedDirectory = "./centralizados/pending";
+string centralizedDirectory = "./centralized/pending";
+
+string[] stringMonths = { "", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
 
 PatternMatchingResult centralizedFiles = financedMatcher.Execute(
     new DirectoryInfoWrapper(
@@ -102,53 +104,92 @@ PatternMatchingResult centralizedFiles = financedMatcher.Execute(
 
 foreach (var file in centralizedFiles.Files)
 {
+    System.IO.Directory.CreateDirectory($"./emails/centralized/{file.Path}");
 
-    System.IO.Directory.CreateDirectory($"./emails/{file.Path}");
-
-    var workbook = new XLWorkbook(Path.Combine("./centralizados/pending", file.Path));
+    var workbook = new XLWorkbook(Path.Combine("./centralized/pending", file.Path));
     var ws = workbook.Worksheet(1);
     var rows = ws.RangeUsed().RowsUsed();
-    var groups = rows.Skip(1).GroupBy(row => row.Cell("B").GetFormattedString());
+    var groups = rows.Skip(1).GroupBy(row => row.Cell("E").GetFormattedString());
 
     var clients = groups.Select(group =>
     {
         var firstRow = group.First();
 
-        var charges = group.Select(row => new CentralizedCharge
+        decimal chargedUSD = 0;
+        decimal chargedVES = 0;
+
+        var charges = group.Select(row =>
         {
-            ValueVES = ((decimal)row.Cell("E").GetDouble()),
-            ExchangeRate = ((decimal)row.Cell("F").GetDouble()),
-            ValueUSD = ((decimal)row.Cell("G").GetDouble()),
-            Description = row.Cell("H").GetFormattedString(),
-            Date = row.Cell("I").GetFormattedString()
+            var valueVES = ((decimal)row.Cell("S").GetDouble());
+            var valueUSD = ((decimal)row.Cell("T").GetDouble());
+            chargedUSD += valueUSD;
+            chargedVES += valueVES;
+
+            return new CentralizedCharge
+            {
+                Day = row.Cell("H").IsEmpty() ? 1 : ((int)row.Cell("H").GetDouble()),
+                Month = row.Cell("I").IsEmpty() ? 1 : ((int)row.Cell("I").GetDouble()),
+                Year = row.Cell("K").IsEmpty() ? 1 : ((int)row.Cell("K").GetDouble()),
+                ValueVES = valueVES,
+                ExchangeRate = ((decimal)row.Cell("N").GetDouble()),
+                ValueUSD = valueUSD,
+                Description = row.Cell("AH").GetFormattedString(),
+                Date = row.Cell("AI").GetFormattedString()
+            };
         }).ToList();
 
-        var chargedVES = charges.Select(x => x.ValueVES).Sum();
-        var chargedUSD = charges.Select(x => x.ValueUSD).Sum();
-        var debt = DEBT_USD - chargedUSD;
-
-        var title = debt > 0 ? "NOTIFICACIÓN DE COBRO POS FINANCIADOS" : "ESTADO DE CUENTA POS FINANCIADOS";
-
-        return new CentralizedUser
+        var months = charges.GroupBy(c => c.Month).Select(month =>
         {
-            Id = firstRow.Cell("B").GetFormattedString(),
-            AffiliationCode = firstRow.Cell("C").GetFormattedString(),
-            Terminal = firstRow.Cell("D").GetFormattedString(),
-            Model = firstRow.Cell("K").GetFormattedString(),
-            Name = firstRow.Cell("L").GetFormattedString(),
-            RIF = firstRow.Cell("M").GetFormattedString(),
-            State = firstRow.Cell("P").GetFormattedString(),
-            Bank = firstRow.Cell("S").GetFormattedString(),
+            var charged = month.Sum(m => m.ValueUSD);
+
+            return new CentralizedMonth
+            {
+                Month = month.First().Month,
+                MonthLetters = stringMonths[month.First().Month],
+                MonthlyFee = 30,
+                Charged = charged,
+                Pending = 30 - charged
+            };
+        }).ToList();
+
+        var fee = months.Sum(x => x.MonthlyFee);
+
+        var debt = months.Sum(x => x.Pending);
+
+        var user = new CentralizedUser
+        {
+            Id = firstRow.Cell("E").GetFormattedString(),
+            AffiliationCode = firstRow.Cell("D").GetFormattedString(),
+            Terminal = firstRow.Cell("G").GetFormattedString(),
+            Model = "FALTA POR COLOCAR", // firstRow.Cell("K").GetFormattedString(),
+            Name = "FALTA POR COLOCAR", //firstRow.Cell("L").GetFormattedString(),
+            RIF = "FALTA POR COLOCAR", // firstRow.Cell("M").GetFormattedString(),
+            State = "FALTA POR COLOCAR", //firstRow.Cell("P").GetFormattedString(),
+            Bank = firstRow.Cell("B").GetFormattedString(),
             Charges = charges,
+            Months = months,
             Debt = Util.formatNumber(debt),
+            ChargedUSD = Util.formatNumber(chargedUSD),
+            ChargedVES = Util.formatNumber(chargedVES),
+            Fee = Util.formatNumber(fee)
         };
+
+        return user;
     }).ToList();
 
-    foreach (var client in clients)
-    {
-        var template = Template.Parse(File.ReadAllText("./template.liquid"));
+    var template = Template.Parse(File.ReadAllText("./centralized.liquid"));
 
-        File.WriteAllText($"./emails/{file.Path}/{client.Id}.html", template.Render(Hash.FromAnonymousObject(client)));
+    var htmls = clients.AsParallel().Select(client =>
+    {
+        var html = template.Render(Hash.FromAnonymousObject(client));
+        return (client.Id, html);
+    }).ToArray();
+
+    foreach (var (id, html) in htmls)
+    {
+        File.WriteAllText($"./emails/centralized/{file.Path}/{id}.html", html);
     }
 }
 #endregion
+
+Environment.Exit(0);
