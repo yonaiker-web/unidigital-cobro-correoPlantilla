@@ -96,7 +96,7 @@ centralizedMatcher.AddIncludePatterns(new[] { "*.xlsx" });
 
 string centralizedDirectory = "./centralized/pending";
 
-string[] stringMonths = { "", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+string[] stringMonths = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
 
 PatternMatchingResult centralizedFiles = financedMatcher.Execute(
     new DirectoryInfoWrapper(
@@ -145,7 +145,7 @@ foreach (var file in centralizedFiles.Files)
             return new CentralizedMonth
             {
                 Month = month.First().Month,
-                MonthLetters = stringMonths[month.First().Month],
+                MonthLetters = stringMonths[month.First().Month - 1],
                 MonthlyFee = 30,
                 Charged = charged,
                 Pending = 30 - charged
@@ -153,7 +153,6 @@ foreach (var file in centralizedFiles.Files)
         }).ToList();
 
         var fee = months.Sum(x => x.MonthlyFee);
-
         var debt = months.Sum(x => x.Pending);
 
         var user = new CentralizedUser
