@@ -11,7 +11,14 @@
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.96.0" />
     <PackageReference Include="DotLiquid" Version="2.2.656" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="6.0.0" />
+    <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
+
   </ItemGroup>
 
 </Project>

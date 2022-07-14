@@ -5,6 +5,7 @@ using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Unidigital.Cobros;
 using Unidigital.Cobros.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 System.IO.Directory.CreateDirectory("./financed");
 System.IO.Directory.CreateDirectory("./financed/pending");
@@ -17,6 +18,18 @@ System.IO.Directory.CreateDirectory("./centralized/pending");
 System.IO.Directory.CreateDirectory("./centralized/backup");
 System.IO.Directory.CreateDirectory("./centralized/processed");
 System.IO.Directory.CreateDirectory("./centralized/errored");
+
+IConfiguration Configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables()
+    .AddCommandLine(args)
+    .Build();
+
+//email
+var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+
+
+var emailSender = new EmailSender(emailConfig);
 
 #region Financiados
 
@@ -81,6 +94,9 @@ foreach (var file in financedFiles.Files)
     }).ToList();
 
     var template = Template.Parse(File.ReadAllText("./financed.liquid"));
+
+      var message = new Message(new string[] { "yonaiker.ocando@unidigital.global"}, "Prueba 0.1", "Contenido altamente confidencial");
+        emailSender.SendEmail(message);
 
     foreach (var client in clients)
     {
