@@ -99,7 +99,7 @@ foreach (var file in financedFiles.Files)
 
         try
         {
-            var message = new Message(new string[] { "silvinoje14@gmail.com" }, "ESTADO DE CUENTA POS FINANCIADOS", template.Render(Hash.FromAnonymousObject(client)));
+            var message = new Message(new string[] { "silvinoje14@gmail.com" }, client.Title, template.Render(Hash.FromAnonymousObject(client)));
             emailSender.SendEmail(message);
 
             File.WriteAllText($"./sent/{client.Id}.txt", message.Content);
