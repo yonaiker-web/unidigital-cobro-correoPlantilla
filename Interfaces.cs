@@ -39,6 +39,7 @@ class PosClient
     public string ChargedVES { get; set; } = null!;
     public string ChargedUSD { get; set; } = null!;
     public string Debt { get; set; } = null!;
+    public decimal Debt2 { get; set; }
     public string Title { get; set; } = null!;
 }
 
@@ -109,13 +110,4 @@ class CentralizedUser
     public string ChargedVES { get; set; } = null!;
 
     public string Debt { get; set; } = null!;
-}
-
-public class Grouping<TKey, TElement> : List<TElement>, IGrouping<TKey, TElement>
-{
-    public Grouping(TKey key) : base() => Key = key;
-    public Grouping(TKey key, int capacity) : base(capacity) => Key = key;
-    public Grouping(TKey key, IEnumerable<TElement> collection)
-        : base(collection) => Key = key;
-    public TKey Key { get; }
 }

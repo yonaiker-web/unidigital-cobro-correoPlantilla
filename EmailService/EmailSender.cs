@@ -23,11 +23,12 @@ namespace Unidigital.Cobros
             var emailMessage = new MailMessage();
 
             emailMessage.From = new MailAddress(_emailConfig.From);
-           foreach (MailAddress address in message.To)
-                {
-                    emailMessage.To.Add(address);
-                }
-            
+
+            foreach (MailAddress address in message.To)
+            {
+                emailMessage.To.Add(address);
+            }
+
             // emailMessage.From.Add(new MailAddress("email", _emailConfig.From));
             // emailMessage.To.AddRange(message.To);
             emailMessage.IsBodyHtml = true;
@@ -45,32 +46,31 @@ namespace Unidigital.Cobros
         private void Send(MailMessage mailMessage)
         {
 
-            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AceptarTodosLosCertificados);
+            // ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AceptarTodosLosCertificados);
 
-            var basicCredential = new NetworkCredential(_emailConfig.UserName, _emailConfig.Password); 
+            // var basicCredential = new NetworkCredential(_emailConfig.UserName, _emailConfig.Password);
 
             using var client = new System.Net.Mail.SmtpClient(_emailConfig.SmtpServer)
             {
                 Port = _emailConfig.Port,
                 UseDefaultCredentials = false,
-                EnableSsl = true,
-             
+                EnableSsl = false,
             };
             try
             {
-                client.Credentials = basicCredential;
+                //     client.Credentials = basicCredential;
                 client.Send(mailMessage);
             }
             catch (System.Exception)
             {
-                
+
                 throw;
             }
             finally
             {
-                    client.Dispose();
+                client.Dispose();
             }
-            
+
 
         }
     }
