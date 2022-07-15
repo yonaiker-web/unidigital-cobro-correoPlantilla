@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Mail;
 
 
@@ -36,17 +37,28 @@ namespace Unidigital.Cobros
             return emailMessage;
         }
 
+        public bool AceptarTodosLosCertificados(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
+        }
+
         private void Send(MailMessage mailMessage)
         {
+
+            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AceptarTodosLosCertificados);
+
+            var basicCredential = new NetworkCredential(_emailConfig.UserName, _emailConfig.Password); 
 
             using var client = new System.Net.Mail.SmtpClient(_emailConfig.SmtpServer)
             {
                 Port = _emailConfig.Port,
                 UseDefaultCredentials = false,
-                EnableSsl = false
+                EnableSsl = true,
+             
             };
             try
             {
+                client.Credentials = basicCredential;
                 client.Send(mailMessage);
             }
             catch (System.Exception)

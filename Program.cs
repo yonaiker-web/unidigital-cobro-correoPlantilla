@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Security.AccessControl;
+using System.Globalization;
 using ClosedXML.Excel;
 using DotLiquid;
 using Microsoft.Extensions.FileSystemGlobbing;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Unidigital.Cobros;
 using Unidigital.Cobros.Interfaces;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 System.IO.Directory.CreateDirectory("./financed");
 System.IO.Directory.CreateDirectory("./financed/pending");
@@ -20,13 +22,14 @@ System.IO.Directory.CreateDirectory("./centralized/processed");
 System.IO.Directory.CreateDirectory("./centralized/errored");
 
 IConfiguration Configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables()
-    .AddCommandLine(args)
+.SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
     .Build();
 
 //email
 var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+
+Console.WriteLine(JsonSerializer.Serialize(emailConfig));
 
 
 var emailSender = new EmailSender(emailConfig);
@@ -59,8 +62,8 @@ foreach (var file in financedFiles.Files)
 
         var charges = group.Select(row => new PosCharge
         {
-            ValueVES = ((decimal)row.Cell("E").GetDouble()),
-            ExchangeRate = ((decimal)row.Cell("F").GetDouble()),
+            ValueVES = row.Cell('E').IsEmpty() ? 0 : ((decimal)row.Cell("E").GetDouble()),
+            ExchangeRate = row.Cell('F').IsEmpty() ? 0 : ((decimal)row.Cell("F").GetDouble()),
             ValueUSD = ((decimal)row.Cell("G").GetDouble()),
             Description = row.Cell("H").GetFormattedString(),
             Date = row.Cell("I").GetFormattedString()
@@ -95,8 +98,6 @@ foreach (var file in financedFiles.Files)
 
     var template = Template.Parse(File.ReadAllText("./financed.liquid"));
 
-      var message = new Message(new string[] { "yonaiker.ocando@unidigital.global"}, "Prueba 0.1", "Contenido altamente confidencial");
-        emailSender.SendEmail(message);
 
     foreach (var client in clients)
     {
@@ -104,6 +105,10 @@ foreach (var file in financedFiles.Files)
     }
 }
 #endregion
+
+
+      var message = new Message(new string[] { "yonaiker.ocando@unidigital.global"}, "Prueba 0.1", "Contenido altamente confidencial");
+        emailSender.SendEmail(message);
 
 #region Centralizados
 
